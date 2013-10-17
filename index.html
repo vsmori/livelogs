@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>LiveLog</title> 
+  <script src="/socket.io/socket.io.js"></script>
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.6.4.js'></script>
+  <link rel="stylesheet" type="text/css" href="normalize.css">
+  <link rel="stylesheet" type="text/css" href="result-light.css">
+  <script type='text/javascript' src="http://code.jquery.com/ui/1.10.0/jquery-ui.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/jquery-ui-git.css">
+  <style type='text/css'>
+  </style>
+<script>
+  var socket = io.connect('http://23.23.187.109:8080');
+  socket.on('log', function (data) {
+    console.log(data);
+	var arr     = data.split("\n");
+	var title   = arr.shift();
+    var content = arr.join("\n");  
+	
+	addLogItem(title,content);	
+  });
+  
+  function addLogItem(title, content) {
+	var newDiv = "<div><h3>"+title+"</h3><div>"+content+"</div></div>";
+	$('.questions').prepend(newDiv)
+	$('.questions').accordion("refresh");        
+  };
+</script>
+<script type='text/javascript'>//<![CDATA[ 
+$(window).load(function(){
+$(document).ready(function() {
+    $( "> div", "#questionsDispos" ).draggable({
+        helper: "clone",
+        revert: "invalid",
+        cursor: "move",
+        handle: "h3",
+        connectToSortable: ".questions"
+    });
+    
+    $( ".questions" ).accordion({
+        header: "> div > h3",
+        collapsible: true,
+        active: false,
+        autoHeight: false,
+        autoActivate: true
+    });
+    
+    $( ".questions" ).sortable({
+        axis: "y",
+        handle: "h3",
+        items: "div",
+        receive: function(event, ui) {
+            $(ui.item).removeClass();
+            $(ui.item).removeAttr("style");
+            $( ".questions" ).accordion("add", "<div>" + ui.item.hmtl() + "</div>");
+        }
+    });
+    
+    $( "#questionsDispos" ).accordion({
+        header: "> div > h3",
+        collapsible: true,
+        active: false,
+        autoHeight: false
+    });
+    $( "button" ).button();
+	
+});
+});//]]>  
+
+</script>
+</head>
+<body>
+  <h3>Live Logs</h3>
+  <div class="questions">
+    <div>
+        <h3><a href="#">Inital Item</a></h3>
+        <div>
+            Content<br />
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+

@@ -1,0 +1,15 @@
+<html>
+<head>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://23.23.187.109:8080');
+  socket.on('log', function (data) {
+    console.log(data);
+  });
+</script>
+</head>
+<body>
+Log Server for Weeppet
+</body>
+</html>
+
